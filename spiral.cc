@@ -82,8 +82,8 @@ private:
 }  // namespace
 
 // Defaults                      large  small
-#define DISPLAY_WIDTH  (9*5)  //  9*5    5*5
-#define DISPLAY_HEIGHT (7*5)  //  7*5    4*5
+#define DISPLAY_WIDTH  30  //  9*5    5*5
+#define DISPLAY_HEIGHT 22  //  7*5    4*5
 #define Z_LAYER 1      // (0-15) 0=background
 #define DELAY 25              // Wait in ms. Determines frame rate.
 #define MOVE_SLOWNESS 100.0   // Slowness of move. More for slow.
@@ -336,17 +336,19 @@ int main(int argc, char *argv[]) {
         for (int y=0; y < opt_height; y++) {
             for (int x=0; x < opt_width; x++) {
                 const float pi = 3.14159;
-                const float count_phase = ((float)(count%400)/199-1) * 2 * pi - pi;
+                const float count_phase = ((float)(count%400)/199-1) * pi;
                 const float x_norm = 2*((float)x / (float)(opt_width-1) - .5);
                 const float y_norm = 2*((float)y / (float)(opt_height-1) - .5);
                 const float theta = atan2(x_norm, y_norm);
 		const float r = sqrt(x_norm*x_norm + y_norm*y_norm);
-                const float value = count_phase + theta - r;
+                const float value = 2*count_phase/pi + theta/pi - 2*r;
                 if (value < lowest_value) lowest_value = value;
                 if (value > higest_value) higest_value = value;
                 pixels.At(x, y) = value;
             }
         }
+        lowest_value = -1;
+        higest_value = 1;
 
         // Copy pixel buffer to canvas, lookup_quantd accordingly.
         const float value_range = higest_value - lowest_value;
