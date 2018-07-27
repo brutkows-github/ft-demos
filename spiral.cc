@@ -330,25 +330,28 @@ int main(int argc, char *argv[]) {
 
     float lowest_value = 100;   // Finding range below.
     float higest_value = -100;
+    const float pi = 3.14159;
 
     do {
         // Write plasma to pixel buffer, still as float. Keep track of range.
         for (int y=0; y < opt_height; y++) {
             for (int x=0; x < opt_width; x++) {
-                const float pi = 3.14159;
-                const float count_phase = ((float)(count%400)/199-1) * pi;
+                const float count_osc = (float)(count%400) / 399;
+                //const float count_osc = (float)abs(count%400 - 200) / 200;
                 const float x_norm = 2*((float)x / (float)(opt_width-1) - .5);
                 const float y_norm = 2*((float)y / (float)(opt_height-1) - .5);
-                const float theta = atan2(x_norm, y_norm);
+                const float theta = atan2(y_norm, x_norm);
 		const float r = sqrt(x_norm*x_norm + y_norm*y_norm);
-                const float value = 2*count_phase/pi + theta/pi - 2*r;
+                //const float value = theta/pi + sin(r/sqrt(2)*pi) + sin(count_osc*pi);
+                //const float value = count_osc;
+                const float value = cos(theta+count_osc*2*pi - 2*log(r));
                 if (value < lowest_value) lowest_value = value;
                 if (value > higest_value) higest_value = value;
                 pixels.At(x, y) = value;
             }
         }
-        lowest_value = -1;
-        higest_value = 1;
+        //lowest_value = -pi + 0;
+        //higest_value = pi + 1;
 
         // Copy pixel buffer to canvas, lookup_quantd accordingly.
         const float value_range = higest_value - lowest_value;
