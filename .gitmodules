@@ -1,3 +1,6 @@
 [submodule "ft"]
 	path = ft
 	url = https://github.com/hzeller/flaschen-taschen.git
+[submodule "flaschen-taschen"]
+	path = flaschen-taschen
+	url = https://github.com/hzeller/flaschen-taschen.git
